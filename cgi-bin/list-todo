@@ -1,0 +1,15 @@
+#!/bin/bash
+echo "Content-type: text/html; charset=utf-8"
+echo ""
+echo "<!DOCTYPE html>"
+echo "<html><head><title>ToDo List</title></head><body>"
+echo "<h1>ToDo List</h1>"
+
+echo "<ul>"
+while read p; do
+    echo "<li>$p</li>"
+done < todo.txt
+echo "</ul>"
+
+echo "<p><a href='/'>Back to the homepage</a></p>"
+echo "</body></html>"

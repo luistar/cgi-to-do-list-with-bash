@@ -1,0 +1,12 @@
+#!/bin/bash
+echo "Content-type: text/html; charset=utf-8"
+echo ""
+echo "<!DOCTYPE html>"
+echo "<html><head><title>Reset ToDo List</title></head><body>"
+echo "<h1>ToDo List has been reset</h1>"
+
+truncate -s 0 todo.txt #reset the file
+
+echo "<p>ToDo List has been reset.</p>"
+echo "<p><a href='/'>Back to the homepage</a></p>"
+echo "</body></html>"

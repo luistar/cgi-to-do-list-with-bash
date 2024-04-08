@@ -1,0 +1,51 @@
+#!/bin/bash
+function url_decode() { : "${*//+/ }"; echo -e "${_//%/\\x}"; }
+
+function response_error_empty_input() {
+    echo "status: 405"
+    echo "Content-type: text/html; charset=utf-8"
+    echo ""
+    echo "<!DOCTYPE html>"
+    echo "<html><head><title>Error 500: Invalid input</title></head><body>"
+    echo "<h1>Error 500: Invalid input!</h1>"
+    echo "<p>Input was empty. <a href="/">Return to the homepage</a>.</p>"
+    echo "</body></html>"
+}
+
+function response_wrong_method() {
+    echo "status: 405"
+    echo "Content-type: text/html; utf-8"
+    echo ""
+    echo "<!DOCTYPE html>"
+    echo "<html><head><title>Error 405: Method not allowed</title></head><body>"
+    echo "<h1>Error 405: Method not allowed!</h1>"
+    echo "<p>Request was performed with $REQUEST_METHOD method instead of POST.</p>"
+    echo "<p>No action was performed.</p>"
+    echo "</body></html>"
+}
+
+function response_success() {
+    echo "Content-type: text/html; utf-8"
+    echo ""
+    echo "<!DOCTYPE html>"
+    echo "<html><head><title>ToDo Element Added!</title></head><body>"
+    echo "<h1>ToDo Element Added!</h1>"
+    echo "<p>&laquo;$*&raquo; has been added to the ToDo List. <a href="/">Return to the homepage</a>."
+    echo "</body></html>"
+}
+
+if [ "$REQUEST_METHOD" = "POST" ]; then
+    if [ "$CONTENT_LENGTH" -gt 0 ]; then
+        read -n $CONTENT_LENGTH POST_DATA <&0
+        ARRAY=(${POST_DATA//[=&]/ })
+        DECODED=$(url_decode "${ARRAY[1]}")
+        if [ -z "$DECODED" ]; then #if input is empty
+            response_error_empty_input 
+        else 
+            echo $DECODED >> todo.txt # append new signature to txt file
+            response_success $DECODED
+        fi
+    fi
+else # page was requested using GET or some other method
+    response_wrong_method
+fi

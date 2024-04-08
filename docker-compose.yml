@@ -1,0 +1,16 @@
+name: cgi-todo
+services:
+  cgi-server:
+    image: cgi-httpd-image
+    container_name: cgi-server
+    build:
+      context: .
+    ports:
+      - "8080:80"
+    volumes:
+      - type: bind
+        source: ./static
+        target: /usr/local/apache2/htdocs/
+      - type: bind
+        source: ./cgi-bin
+        target: /usr/local/apache2/cgi-bin/

@@ -1,0 +1,16 @@
+#!/bin/bash
+echo "Content-type: text/html; charset=iso-8859-1"
+echo ""
+echo "<!DOCTYPE html>"
+echo "<html><head><title>Hello CGI!</title></head><body>"
+echo "<h1>Hello CGI!</h1>"
+echo "<p>This page was loaded on "
+date +"%d/%m/%Y at %H:%M:%S. </p>"
+echo "<p>The user agent your browser declared is <code>" $HTTP_USER_AGENT "</code></p>"
+echo "<h2>Environment variables</h2>"
+echo "<p>Environment variables available in the script are reported as follows.</p>"
+echo "<code>"
+env
+echo "</code>"
+
+echo "</p></body></html>"
